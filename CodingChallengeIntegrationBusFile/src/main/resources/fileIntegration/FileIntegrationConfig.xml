@@ -49,7 +49,7 @@
 	
 	<int:channel id="fileProcessingChannel" />
 	
-	<bean id="fileSiteReportBatchRepository" class="com.challenge.coding.integration.common.jdbcRepository">
+	<bean id="fileSiteReportBatchRepository" class="com.challenge.coding.integration.common.jdbcRepository.GenericSiteReportBatchRepositoryImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 		<property name="deleteStatement" value="${file.delete.sql.statement}" />
 		<property name="batchInsertStatement" value="${file.batch.insert.sql.statement}" />
