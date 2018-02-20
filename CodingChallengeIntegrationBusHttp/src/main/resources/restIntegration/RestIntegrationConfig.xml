@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<bean id="requestGenerator" class="com.challenge.coding.integration.common.requestGeneration.SimpleRequestGenerator" />
+	
+	<task:executor id="restTaskExecutor" pool-size="10" />
+
+	<int:inbound-channel-adapter ref="requestGenerator"
+								 method="generateRequest" 
+								 channel="requestGenerationChannel">
+		<int:poller task-executor="restTaskExecutor"
+					fixed-rate="600000"
+					error-channel="httpExceptionHandlingChannel" />
+	</int:inbound-channel-adapter>
+	
+	<int:channel id="requestGenerationChannel" />
+	
+	<int-http:outbound-gateway id="outboundHttpAdapter"
+								url="${http.integration.input.url}"
+								http-method="GET" charset="UTF-8"
+								expected-response-type="java.lang.String"
+								request-channel="requestGenerationChannel"
+								reply-channel="httpResponseChannel">
+	</int-http:outbound-gateway>
+	
+	<int:channel id="httpResponseChannel" />
+	
+	<bean id="restResponsJsonStrBeanTransformerBean" class="com.challenge.coding.integration.http.message.payload.transformation.RestJsonMessagePayloadTransformer" />
+	
+	<int:transformer id="restResponsJsonStrBeanTransformer" 
+					 ref="restResponsJsonStrBeanTransformerBean"
+					 method="transformPayload"
+					 input-channel="httpResponseChannel"
+					 output-channel="restResponseBatchProcessingChannel" />
+					 
+	<int:channel id="restResponseBatchProcessingChannel" />
+	
+	<bean id="restSiteReportBatchRepository" class="com.challenge.coding.integration.common.jdbcRepository.GenericSiteReportBatchRepositoryImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="deleteStatement" value="${rest.delete.sql.statement}" />
+		<property name="batchInsertStatement" value="${rest.batch.insert.sql.statement}" />
+	</bean>
+	
+	<bean id="restResponseBatchInsertService" class="com.challenge.coding.integration.http.service.JdbcRestResponseBatchInsertService">
+		<property name="genericSiteReportBatchRepository" ref="restSiteReportBatchRepository" />
+	</bean>
+	
+	<int:service-activator input-channel="restResponseBatchProcessingChannel"
+						   ref="restResponseBatchInsertService"
+						   method="processMessage" />
+						   
+	<int:channel id="httpExceptionHandlingChannel" />
+	
+	<int:logging-channel-adapter channel="httpExceptionHandlingChannel"
+								 level="ERROR"
+								 log-full-message="true" />
+</beans>		
