@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: CodingChallengeIntegrationBus
+    
+---
+spring:
+  profiles: dev
+  cloud:
+    config:
+      uri: http://localhost:8888
+      username: ken
+      password: ken
+    
