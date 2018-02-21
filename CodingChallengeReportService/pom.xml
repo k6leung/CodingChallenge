@@ -24,6 +24,7 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Edgware.SR2</spring-cloud.version>
 		<CodingChallengeCommon.version>0.0.1-SNAPSHOT</CodingChallengeCommon.version>
+		<CodingChallengeCORSUtil.version>0.0.1-SNAPSHOT</CodingChallengeCORSUtil.version>
 	</properties>
 
 	<dependencies>
@@ -67,6 +68,11 @@
 			<groupId>com.challenge.coding</groupId>
 			<artifactId>CodingChallengeCommon</artifactId>
 			<version>${CodingChallengeCommon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.challenge.coding</groupId>
+			<artifactId>CodingChallengeCORSUtil</artifactId>
+			<version>${CodingChallengeCORSUtil.version}</version>
 		</dependency>
 	</dependencies>
 
