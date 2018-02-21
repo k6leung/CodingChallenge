@@ -205,7 +205,7 @@ module.exports = ".header-div {\r\n  float:right;\r\n}\r\n\r\n.text {\r\n  font-
 /***/ "./src/app/authenticated-portal/authenticated-portal-header/authenticated-portal-header.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"header-div\">\n  <a class=\"text\" (click)=\"logout()\" class=\"action-link\">logout</a>\n</div>\n"
+module.exports = "<div class=\"header-div\">\n  <a (click)=\"logout()\" class=\"text action-link\">logout</a>\n</div>\n"
 
 /***/ }),
 
@@ -381,7 +381,7 @@ module.exports = ".text {\r\n  font-family: Arial;\r\n}\r\n\r\n.input-group {\r\
 /***/ "./src/app/authenticated-portal/report-enquiry/report-enquiry-page/report-enquiry-page.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <h2 class=\"text\">Website Visit Report Enquiry</h2>\n  <div>\n    <div class=\"input-group\">\n      <label class=\"text\">Select a date to enquire:</label>\n      <select id=\"dateSelect\" name=\"dateSelect\" [(ngModel)]=\"selectedDate\" (change)=\"getReportByDates()\">\n        <option value=\"\" class=\"text\">Please select...</option>\n        <option *ngFor=\"let date of (dates | async)\" [ngValue]=\"date\" class=\"text\">{{date}}</option>\n      </select>\n    </div>\n    <div *ngIf=\"(reports.length > 0 | async)\" class=\"division-separator\">\n      <table>\n        <tr>\n          <th class=\"website-column data-column\">Website:</th>\n          <th class=\"visit-column data-column\">Visits:</th>\n          <th class=\"visit-date-column data-column\">Visit Date:</th>\n        </tr>\n        <tr *ngFor=\"let report of (reports | async)\">\n          <td class=\"website-column data-column\">{{report.website}}</td>\n          <td class=\"visit-column data-column\">{{report.visit}}</td>\n          <td class=\"visit-date-column data-column\">{{report.visitDate | date: 'yyyy-MM-dd'}}</td>\n        </tr>\n      </table>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div>\n  <h2 class=\"text\">Website Visit Report Enquiry</h2>\n  <div>\n    <div class=\"input-group\">\n      <label class=\"text\">Select a date to enquire:</label>\n      <select id=\"dateSelect\" name=\"dateSelect\" [(ngModel)]=\"selectedDate\" (change)=\"getReportByDates()\">\n        <option value=\"\" class=\"text\">Please select...</option>\n        <option *ngFor=\"let date of (dates | async)\" [ngValue]=\"date\" class=\"text\">{{date}}</option>\n      </select>\n    </div>\n    <div *ngIf=\"(reports != null) && (reports | async).length > 0\" class=\"division-separator\">\n      <table>\n        <tr>\n          <th class=\"website-column data-column\">Website:</th>\n          <th class=\"visit-column data-column\">Visits:</th>\n          <th class=\"visit-date-column data-column\">Visit Date:</th>\n        </tr>\n        <tr *ngFor=\"let report of (reports | async)\">\n          <td class=\"website-column data-column\">{{report.website}}</td>\n          <td class=\"visit-column data-column\">{{report.visit}}</td>\n          <td class=\"visit-date-column data-column\">{{report.visitDate | date: 'yyyy-MM-dd'}}</td>\n        </tr>\n      </table>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -392,6 +392,8 @@ module.exports = "<div>\n  <h2 class=\"text\">Website Visit Report Enquiry</h2>\
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportEnquiryPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__report_enquiry_service__ = __webpack_require__("./src/app/authenticated-portal/report-enquiry/report-enquiry.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__("./node_modules/rxjs/_esm5/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of__ = __webpack_require__("./node_modules/rxjs/_esm5/add/observable/of.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -403,18 +405,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
+
 var ReportEnquiryPageComponent = /** @class */ (function () {
     function ReportEnquiryPageComponent(reportEnquiryService) {
         this.reportEnquiryService = reportEnquiryService;
     }
     ReportEnquiryPageComponent.prototype.ngOnInit = function () {
         this.selectedDate = "";
-        this.reports = [];
-        this.reportEnquiryService.getAllDates(this.getAllDatesSuccessCallBack.bind(this), this.getAllDatesFailCallBack);
+        this.reports = null;
+        this.dates = this.reportEnquiryService.getAllDates(this.getAllDatesSuccessCallBack.bind(this), this.getAllDatesFailCallBack);
     };
     ReportEnquiryPageComponent.prototype.getAllDatesSuccessCallBack = function (datesResponse) {
         console.log("ReportEnquiryPageComponent.getAllDatesSuccessCallBack() - datesResponse: " + JSON.stringify(datesResponse));
-        this.dates = datesResponse;
     };
     ReportEnquiryPageComponent.prototype.getAllDatesFailCallBack = function (error) {
         console.error("ReportEnquiryPageComponent.getAllDatesFailCallBack() - error: " + JSON.stringify(error));
@@ -427,12 +430,14 @@ var ReportEnquiryPageComponent = /** @class */ (function () {
     };
     ReportEnquiryPageComponent.prototype.getReportByDates = function () {
         if ((this.selectedDate) && !(/^\s*$/.test(this.selectedDate))) {
-            this.reportEnquiryService.getReportsByDate(this.selectedDate, this.getReportByDatesSuccessCallBack.bind(this), this.getReportByDatesFailCallBack);
+            this.reports = this.reportEnquiryService.getReportsByDate(this.selectedDate, this.getReportByDatesSuccessCallBack.bind(this), this.getReportByDatesFailCallBack);
+        }
+        else {
+            this.reports = __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["a" /* Observable */].of([]);
         }
     };
     ReportEnquiryPageComponent.prototype.getReportByDatesSuccessCallBack = function (response) {
         console.log("ReportEnquiryPageComponent.getReportByDatesSuccessCallBack() - response: " + JSON.stringify(response));
-        this.reports = response;
     };
     ReportEnquiryPageComponent.prototype.getReportByDatesFailCallBack = function (error) {
         console.error("ReportEnquiryPageComponent.getReportByDatesFailCallBack() - error: " + JSON.stringify(error));
@@ -532,7 +537,9 @@ var ReportEnquiryService = /** @class */ (function () {
             __WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].reportServicePort +
             "/api/dates";
         console.log("ReportEnquiryService.getAllDates() - getAllDatesUri: " + getAllDatesUri);
-        this.http.get(getAllDatesUri).subscribe(function (response) { return _this.getAllDatesSuccessCallBack(response, successCallBack); }, function (e) { return _this.getAllDatesFailCallBack(e, failCallBack); });
+        var result = this.http.get(getAllDatesUri);
+        result.subscribe(function (response) { return _this.getAllDatesSuccessCallBack(response, successCallBack); }, function (e) { return _this.getAllDatesFailCallBack(e, failCallBack); });
+        return result;
     };
     ReportEnquiryService.prototype.getAllDatesSuccessCallBack = function (response, successCallBack) {
         console.log("ReportEnquiryService.getAllDatesSuccessCallBack() starts.");
@@ -552,9 +559,11 @@ var ReportEnquiryService = /** @class */ (function () {
         var getReportsUri = __WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].webServiceProtocol + "://" +
             __WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].reportServiceHost + ":" +
             __WEBPACK_IMPORTED_MODULE_1__environments_environment__["a" /* environment */].reportServicePort +
-            "/reportForDate/" + dateStr;
+            "/api/reportForDate/" + dateStr;
         console.log("ReportEnquiryService.getReportsByDate() - getReportsUri: " + getReportsUri);
-        this.http.get(getReportsUri).subscribe(function (response) { return _this.getReportByDateSuccessCallBack(response, successCallBack); }, function (error) { return _this.getReportByDateFailCallBack(error, failCallBack); });
+        var result = this.http.get(getReportsUri);
+        result.subscribe(function (response) { return _this.getReportByDateSuccessCallBack(response, successCallBack); }, function (error) { return _this.getReportByDateFailCallBack(error, failCallBack); });
+        return result;
     };
     ReportEnquiryService.prototype.getReportByDateSuccessCallBack = function (response, successCallBack) {
         console.log("ReportEnquiryService.getReportByDateSuccessCallBack() - response: " + JSON.stringify(response));
@@ -1103,7 +1112,7 @@ var AuthenticationService = /** @class */ (function () {
         var logoutUri = __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].webServiceProtocol + "://" +
             __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].authenticationServiceHost + ":" +
             __WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].authenticationServicePort +
-            "/api/logout/" + token;
+            "/api/revoke/" + token;
         console.log("AuthenticationService.logout() - logoutUri: " + logoutUri);
         this.http.delete(logoutUri).subscribe(function (response) { return _this.logoutSuccessCallBack(response, successCallBack); }, function (error) { return _this.logoutFailCallBack(error, failCallBack); });
     };
