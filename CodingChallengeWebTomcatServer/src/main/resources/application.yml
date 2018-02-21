@@ -7,4 +7,17 @@ spring:
   profiles: dev
   
 server:
-  port: 80 
+  port: 80
+---
+spring:
+  profiles: sit
+  
+server:
+  port: 80  
+  ssl:
+    enabled: true
+    key-store: ./keystore/keystore.jks
+    key-store-password: abc1234
+    key-alias: localhostTest
+    key-password: abc1234
+    keyStoreType: PKCS12

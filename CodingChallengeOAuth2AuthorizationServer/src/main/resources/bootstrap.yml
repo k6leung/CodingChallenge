@@ -13,4 +13,12 @@ spring:
       uri: http://localhost:8888
       username: ken
       password: ken
+---
+spring:
+  profiles: sit
+  cloud:
+    config:
+      uri: https://localhost:8888
+      username: ken
+      password: ken
  

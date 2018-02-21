@@ -21,11 +21,23 @@ security:
     enabled: true
 ---    
 spring:
-  profiles: dev    
+  profiles: dev
 security:    
   user:
     name: ken
     password: ken
-
-
-      
+---
+spring:
+  profiles: sit
+security:    
+  user:
+    name: ken
+    password: ken  
+server:
+  ssl:
+    enabled: true
+    key-store: ./keystore/keystore.jks
+    key-store-password: abc1234
+    key-alias: localhostTest
+    key-password: abc1234
+    keyStoreType: PKCS12
