@@ -1,0 +1,5 @@
+com\challenge\coding\integration\http\jdbc\statementSetter\HttpBatchPreparedStatementSetter.class
+com\challenge\coding\integration\http\model\excludeList\ExcludeListItem.class
+com\challenge\coding\integration\http\message\payload\transformation\exception\RestJsonMessagePayloadTransformationException.class
+com\challenge\coding\integration\http\message\payload\transformation\RestJsonMessagePayloadTransformer.class
+com\challenge\coding\integration\http\service\JdbcRestResponseBatchInsertService.class
