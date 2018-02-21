@@ -25,7 +25,7 @@ public class AppAuthenticationRestController {
 		this.appService = appService;
 	}
 
-	//due to the controller advice exception handler setup, we should let exceptions propagate to that handler
+	//due to the controller advice exception handler setup, we should let exceptions propagate to that handler	
 	@RequestMapping(value="/authenticate", 
 					method=RequestMethod.POST, 
 					consumes="application/json", 

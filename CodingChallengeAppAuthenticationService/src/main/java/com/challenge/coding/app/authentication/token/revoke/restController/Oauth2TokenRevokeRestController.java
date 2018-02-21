@@ -24,7 +24,9 @@ public class Oauth2TokenRevokeRestController {
 		this.tokenRevokeService = tokenRevokeService;
 	}
 	
-	@RequestMapping(value="/revoke/{token}", method=RequestMethod.DELETE, produces="application/json")
+	@RequestMapping(value="/revoke/{token}", 
+						method=RequestMethod.DELETE, 
+						produces="application/json")
 	public RevokeTokenResponse revokeToken(@PathVariable("token")String token) {
 		
 		this.tokenRevokeService.revokeToken(token);
