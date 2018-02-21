@@ -1,4 +1,0 @@
-com\challenge\coding\integration\file\jdbc\statementSetter\FileBatchPreparedStatementSetter.class
-com\challenge\coding\integration\file\input\message\header\enricher\exception\InputFileParsingMessageHeaderEnrichException.class
-com\challenge\coding\integration\file\service\JdbcFileBatchInsertService.class
-com\challenge\coding\integration\file\input\message\header\enricher\InputFileParsingMessageHeaderEnricher.class
