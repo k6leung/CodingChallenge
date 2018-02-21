@@ -1,7 +1,0 @@
-com\challenge\coding\integration\common\file\move\BackupFileMovingService.class
-com\challenge\coding\integration\common\jdbcRepository\GenericSiteReportBatchRepositoryImpl.class
-com\challenge\coding\integration\common\file\parsing\stringSplit\SimpleDelimitedStringSplitterImpl.class
-com\challenge\coding\integration\common\file\backup\fileExtension\DateTimeFileExtensionGenerator.class
-com\challenge\coding\integration\common\requestGeneration\SimpleRequestGenerator.class
-com\challenge\coding\integration\common\jdbcRepository\GenericSiteReportBatchRepository.class
-com\challenge\coding\integration\common\file\parsing\stringSplit\BatchFileLineStringSplitter.class
